@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Padukuhan Koripan II - Gunungkidul</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==================================================================
+           [1] PENGATURAN GAMBAR BACKGROUND & VARIABEL
+           ================================================================== */
+        :root {
+            --bg-hero: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2232&auto=format&fit=crop');
+            --bg-profil: url('bck.JPG'); 
+            --bg-stats: url('stakbck.jpeg');
+            --bg-potensi: url('umkmbck.jpeg');
+            --bg-lokasi: url('mapbck.JPG'); 
+            --bg-perangkat: url('perangkatbck.jpeg');
+
+            /* Warna Tema */
+            --blend-color: #1e1a16; 
+            --color-accent: #C8A165; 
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+        }
+
+        /* --- CSS RESET --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: var(--font-body); 
+            line-height: 1.8; 
+            overflow-x: hidden; 
+            background-color: var(--blend-color); 
+            color: #e0d0b0; 
+        }
+        
+        h1, h2, h3, h4 { font-family: var(--font-heading); }
+
+        /* --- GLOBAL SECTION STYLES --- */
+        .bg-section {
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px; 
+            padding-bottom: 80px;
+        }
+
+        .bg-section::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;
+            background-color: rgba(30, 26, 22, 0.45); 
+        }
+
+        .bg-section::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;
+            pointer-events: none;
+            background: linear-gradient(to bottom, var(--blend-color) 0%, rgba(30, 26, 22, 0.5) 5%, transparent 12%, transparent 88%, rgba(30, 26, 22, 0.5) 95%, var(--blend-color) 100%);
+        }
+
+        .container { 
+            width: 85%; max-width: 1100px; margin: 0 auto; position: relative; z-index: 3; 
+        }
+
+        .section-title { text-align: center; margin-bottom: 60px; margin-top: 0; }
+        .section-title h2 { 
+            font-size: 3.5rem; margin-bottom: 15px; color: var(--color-accent);
+            text-shadow: 0 4px 10px rgba(0,0,0,0.8); line-height: 1.2;
+        }
+        .divider { 
+            width: 80px; height: 3px; margin: 0 auto; 
+            background: var(--color-accent); box-shadow: 0 0 10px var(--color-accent);
+        }
+        
+        .btn {
+            display: inline-block; padding: 15px 40px; 
+            border: 1px solid var(--color-accent);
+            color: var(--color-accent); text-decoration: none; 
+            text-transform: uppercase; letter-spacing: 3px; font-size: 0.9rem;
+            transition: 0.4s; background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px); border-radius: 50px;
+            cursor: pointer;
+        }
+        .btn:hover { 
+            background: var(--color-accent); color: #1e1a16; 
+            box-shadow: 0 0 30px rgba(200, 161, 101, 0.6); 
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 20px 0; z-index: 1000;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); 
+            transition: 0.5s ease;
+        }
+        nav.scrolled { 
+            background-color: rgba(30, 26, 22, 0.95); padding: 15px 0; 
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { 
+            color: var(--color-accent); font-size: 1.5rem; font-weight: bold; 
+            font-family: var(--font-heading); text-shadow: 0 2px 5px rgba(0,0,0,0.8); 
+        }
+        .nav-links { list-style: none; display: flex; gap: 30px; }
+        .nav-links a { 
+            text-decoration: none; color: #fff; text-transform: uppercase; 
+            font-size: 0.85rem; letter-spacing: 2px; transition: 0.3s; opacity: 0.9;
+        }
+        .nav-links a:hover { color: var(--color-accent); opacity: 1; }
+        .burger { display: none; color: var(--color-accent); font-size: 1.8rem; cursor: pointer; }
+
+        /* --- CSS MODAL / POPUP --- */
+        .modal {
+            display: none; 
+            position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.85); 
+            backdrop-filter: blur(8px); 
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+
+        .modal.show { display: flex; align-items: center; justify-content: center; opacity: 1; }
+
+        .modal-content {
+            background-color: #1e1a16;
+            margin: auto; padding: 0;
+            border: 1px solid var(--color-accent);
+            width: 90%; max-width: 700px;
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(200, 161, 101, 0.3);
+            position: relative;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            padding: 20px 30px;
+            border-bottom: 1px solid rgba(200, 161, 101, 0.3);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .modal-header h3 { color: var(--color-accent); font-size: 1.8rem; margin: 0; }
+        
+        .close-btn {
+            color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .close-btn:hover { color: var(--color-accent); }
+
+        .modal-body { padding: 30px; font-size: 1.05rem; color: #ddd; }
+        .modal-body img { 
+            width: 100%; height: 250px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; 
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* --- [BARU] CSS UNTUK GALERI PROFIL 4 GAMBAR --- */
+        .gallery-grid-profil {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 Kolom */
+            gap: 15px;
+            width: 100%;
+        }
+
+        .img-box {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .img-box img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
+        }
+
+        /* Aturan Tinggi Gambar (Besar/Kecil) */
+        .img-box.tall { height: 280px; }
+        .img-box.short { height: 180px; }
+
+        /* Mengatur posisi zig-zag */
+        .col-left { display: flex; flex-direction: column; gap: 15px; margin-top: 0; }
+        .col-right { display: flex; flex-direction: column; gap: 15px; margin-top: 40px; }
+
+        /* Efek Hover (Membesar) */
+        .img-box:hover {
+            transform: scale(1.08); /* Membesar */
+            z-index: 10;
+            box-shadow: 0 20px 40px rgba(200, 161, 101, 0.3);
+            border-color: var(--color-accent);
+        }
+
+        /* --- SECTION STYLING --- */
+        #home { background-image: var(--bg-hero); text-align: center;}
+        .hero-content h1 { 
+            font-size: 4.5rem; line-height: 1.1; margin-bottom: 25px; color: #fff;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.9);
+        }
+
+        #tentang { background-image: var(--bg-profil); }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .about-text p { font-size: 1.1rem; color: #eee; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        
+        /* Hapus style .about-img lama karena diganti gallery-grid-profil */
+        
+        #statistik { background-image: var(--bg-stats); }
+        .stats-grid { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; text-align: center; }
+        .stat-item h3 { font-size: 4rem; color: var(--color-accent); margin-bottom: 0; line-height: 1; text-shadow: 0 3px 10px rgba(0,0,0,0.8); }
+        .stat-item p { font-size: 1.1rem; letter-spacing: 3px; color: #ddd; margin-top: 10px; font-weight: bold; }
+
+        /* GALERI POTENSI */
+        #potensi { background-image: var(--bg-potensi); }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .gallery-item { 
+            position: relative; height: 300px; overflow: hidden; border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            cursor: pointer;
+        }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.7s ease; }
+        .gallery-text { 
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 25px; 
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); 
+            color: #fff; transition: 0.3s;
+        }
+        .gallery-item:hover img { transform: scale(1.1); }
+        
+        .gallery-item::after {
+            content: 'Lihat Detail';
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--color-accent); color: #1e1a16;
+            padding: 10px 20px; border-radius: 30px; font-weight: bold; font-size: 0.8rem;
+            opacity: 0; transition: 0.4s ease; pointer-events: none;
+        }
+        .gallery-item:hover::after { opacity: 1; }
+
+        #lokasi { background-image: var(--bg-lokasi); background-position: center 20%; }
+        .map-responsive {
+            overflow: hidden; height: 350px; width: 100%; max-width: 800px; 
+            margin: 0 auto; position: relative; border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .map-responsive iframe { 
+            left: 0; top: 0; height: 100%; width: 100%; position: absolute; filter: grayscale(10%) contrast(1.1); 
+        }
+        .address-box {
+            margin-top: 30px; text-align: center;
+            background: rgba(30, 26, 22, 0.85); backdrop-filter: blur(8px);
+            padding: 20px 40px; border-radius: 50px;
+            border: 1px solid rgba(200, 161, 101, 0.5);
+            width: fit-content; max-width: 95%; margin-left: auto; margin-right: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+
+        #perangkat { background-image: var(--bg-perangkat); }
+        .team-grid { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+        .team-card { 
+            background: rgba(30, 26, 22, 0.6); backdrop-filter: blur(8px); 
+            padding: 40px 20px; width: 260px; text-align: center; 
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; transition: 0.4s; 
+        }
+        .team-card:hover { transform: translateY(-10px); border-color: var(--color-accent); background: rgba(30, 26, 22, 0.8); }
+        .team-img { 
+            width: 130px; height: 130px; border-radius: 50%; object-fit: cover; 
+            border: 3px solid var(--color-accent); margin-bottom: 15px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        footer { 
+            background: #15120f; padding: 50px 0; text-align: center; 
+            border-top: 1px solid #333; font-size: 0.9rem; letter-spacing: 1px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .about-grid { grid-template-columns: 1fr; }
+            .nav-links { 
+                position: fixed; right: 0; top: 0; height: 100vh; width: 70%; 
+                background: #1e1a16; flex-direction: column; padding-top: 100px; 
+                transform: translateX(100%); transition: 0.4s; 
+                box-shadow: -5px 0 20px rgba(0,0,0,0.8);
+            }
+            .nav-links.active { transform: translateX(0); }
+            .burger { display: block; z-index: 1001; }
+            .hero-content h1 { font-size: 2.8rem; }
+            .bg-section { min-height: auto; padding-top: 100px; padding-bottom: 100px; } 
+            #home { min-height: 100vh; }
+            .map-responsive { padding-bottom: 100%; }
+            .address-box { width: 90%; border-radius: 20px; }
+            .modal-content { width: 95%; margin-top: 20%; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="container nav-container">
+            <div class="logo">KORIPAN II</div>
+            <ul class="nav-links">
+                <li><a href="#home">Beranda</a></li>
+                <li><a href="#tentang">Profil</a></li>
+                <li><a href="#potensi">Potensi</a></li>
+                <li><a href="#lokasi">Lokasi</a></li>
+                <li><a href="#perangkat">Perangkat</a></li>
+            </ul>
+            <div class="burger">☰</div>
+        </div>
+    </nav>
+
+    <section id="home" class="bg-section">
+        <div class="container hero-content">
+            <span style="color: var(--color-accent); letter-spacing: 4px; text-transform: uppercase; font-size: 0.9rem; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">Selamat Datang di</span>
+            <h1>Padukuhan<br>Koripan II</h1>
+            <p style="margin-bottom: 40px; font-size: 1.2rem; font-style: italic; color: #ddd; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">"Manunggaling Sedya Hanggayuh Kerta Raharja"</p>
+            <a href="#tentang" class="btn">Jelajahi</a>
+        </div>
+    </section>
+
+    <section id="tentang" class="bg-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Profil Wilayah</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="about-grid">
+                
+                <div class="about-text">
+                    <h3>Sejarah Singkat</h3>
+                    <p style="margin-top: 15px;">Terletak di perbukitan karst Kalurahan Sumbergiri, Gunungkidul, nama Koripan II dimaknai sebagai "sumber kehidupan yang tak pernah padam." Sejak awal berdiri, masyarakat kami memegang teguh filosofi Hamemayu Hayuning Bawana.</p>
+                    <br>
+                    <p>Semangat ini diwujudkan melalui kehidupan warga yang guyub rukun. Di tengah tantangan alam, Koripan II terus bertumbuh dengan mengandalkan inovasi pertanian lahan kering yang berkelanjutan sebagai napas kehidupan dukuh.</p>
+                </div>
+
+                <div class="gallery-grid-profil">
+                    <div class="col-left">
+                        <div class="img-box tall">
+                            <img src="profile1.jpg" alt="Profil 1">
+                        </div>
+                        <div class="img-box short">
+                            <img src="https://images.unsplash.com/photo-1518182170546-0766be6f3ec4?q=80&w=1000&auto=format&fit=crop" alt="Profil 2">
+                        </div>
+                    </div>
+
+                    <div class="col-right">
+                        <div class="img-box short">
+                            <img src="https://images.unsplash.com/photo-1623164406256-4c4f9012353e?q=80&w=1000&auto=format&fit=crop" alt="Profil 3">
+                        </div>
+                        <div class="img-box tall">
+                            <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1000&auto=format&fit=crop" alt="Profil 4">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="statistik" class="bg-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Statistika Masyarakat</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>85</h3>
+                    <p>KEPALA KELUARGA</p>
+                </div>
+                <div class="stat-item">
+                    <h3>320</h3>
+                    <p>PENDUDUK</p>
+                </div>
+                <div class="stat-item">
+                    <h3>3</h3>
+                    <p>RT</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="potensi" class="bg-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Potensi Lokal</h2>
+                <div class="divider"></div>
+                <p style="margin-top: 15px; color: #aaa;">Klik pada gambar untuk melihat detail penjelasan.</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item" onclick="openModal('modal-umkm')">
+                    <img src="entho.jpeg" alt="UMKM">
+                    <div class="gallery-text"><h4>UMKM Lokal</h4><p>Entho-Entho & Masti</p></div>
+                </div>
+                
+                <div class="gallery-item" onclick="openModal('modal-tani')">
+                    <img src="swahbck.jpeg" alt="Pertanian">
+                    <div class="gallery-text"><h4>Persawahan</h4><p>Persawahan Koripan 2</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="modal-umkm" class="modal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>UMKM Lokal</h3>
+                <span class="close-btn" onclick="closeModalBtn('modal-umkm')">×</span>
+            </div>
+            <div class="modal-body">
+                <img src="entho.jpeg" alt="Detail UMKM">
+                <p><strong>Entho-Entho & Masti</strong> Entho-entho Masti menghadirkan kelezatan autentik dari kacang Kedelai dan Tolo pegunungan pilihan, diparut segar dan diracik dengan resep rahasia khas.</p>
+                <br>
+                <p>Sebuah komitmen untuk mempertahankan rasa asli warisan tradisional di tengah perkembangan kuliner modern.</p>
+                <br>
+                <p>Info Lebih Lanjut Klik link Dibawah:</p>
+                
+                <a href="https://entho-entho-masti.vercel.app/" target="_blank" style="color: var(--color-accent); font-weight: bold; text-decoration: underline;">
+                    https://entho-entho-masti.vercel.app/
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-tani" class="modal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Pertanian Lahan Kering</h3>
+                <span class="close-btn" onclick="closeModalBtn('modal-tani')">×</span>
+            </div>
+            <div class="modal-body">
+                <img src="swahbck.jpeg" alt="Detail Pertanian">
+                <p>Mengingat kontur tanah Gunungkidul yang berkapur, warga Koripan II mengembangkan <strong>Persawahan</strong>.</p>
+                <br>
+                <p>Selain sebagai sumber pangan pokok, lahan persawahan ini juga bagus sebagai spot foto saat sunset tiba dengan cahaya merah orange nya dipadukan dengan persawahan yang subur.</p>
+            </div>
+        </div>
+    </div>
+
+    <section id="lokasi" class="bg-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Lokasi Wilayah</h2>
+                <div class="divider"></div>
+            </div>
+            
+            <div class="map-responsive">
+                <iframe src="https://maps.google.com/maps?q=Entho+-+Entho+Masti+Gunungkidul&t=&z=15&ie=UTF8&iwloc=&output=embed" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+
+            <div class="address-box">
+                <p style="color: #fff; font-size: 1.1rem; margin: 0;">
+                    📍 <strong>Alamat:</strong> Padukuhan Koripan II, Kelurahan Sumbergiri, Kapanewon Ponjong, Kabupaten Gunungkidul, DIY.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="perangkat" class="bg-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Perangkat Dukuh</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="team-grid">
+                <div class="team-card">
+                    <img src="p.dukuh.jpeg" class="team-img" alt="Dukuh">
+                    <h4>Bpk. [Nama]</h4>
+                    <p style="color:var(--color-accent); margin-top:5px;">Kepala Dukuh</p>
+                </div>
+                <div class="team-card">
+                    <img src="p.rw.jpeg" class="team-img" alt="RW">
+                    <h4>Bpk. [Nama]</h4>
+                    <p style="color:var(--color-accent); margin-top:5px;">Ketua RW</p>
+                </div>
+                <div class="team-card">
+                    <img src="p.01.jpeg" class="team-img" alt="RT 01">
+                    <h4>Bpk. [Nama]</h4>
+                    <p style="color:var(--color-accent); margin-top:5px;">Ketua RT 01</p>
+                </div>
+                <div class="team-card">
+                    <img src="p.02.jpeg" class="team-img" alt="RT 02">
+                    <h4>Bpk. [Nama]</h4>
+                    <p style="color:var(--color-accent); margin-top:5px;">Ketua RT 02</p>
+                </div>
+                <div class="team-card">
+                    <img src="p.03.jpeg" class="team-img" alt="RT 03">
+                    <h4>Bpk. Parjiyo</h4>
+                    <p style="color:var(--color-accent); margin-top:5px;">Ketua RT 03</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>© 2026 Padukuhan Koripan II x KKN Tematik 42 Universitas Duta Bangsa Surakarta</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+        
+        // Mobile Menu
+        const burger = document.querySelector('.burger');
+        const navLinks = document.querySelector('.nav-links');
+        burger.addEventListener('click', () => { navLinks.classList.toggle('active'); });
+        document.querySelectorAll('.nav-links a').forEach(l => l.addEventListener('click', () => navLinks.classList.remove('active')));
+
+        // === SCRIPT POPUP MODAL ===
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.style.display = "flex";
+            setTimeout(() => { modal.classList.add('show'); }, 10);
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeModalBtn(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('show');
+            setTimeout(() => { modal.style.display = "none"; }, 300);
+            document.body.style.overflow = 'auto'; 
+        }
+
+        function closeModal(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
+                setTimeout(() => { event.target.style.display = "none"; }, 300);
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+</body>
+</html>
